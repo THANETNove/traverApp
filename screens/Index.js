@@ -1,8 +1,12 @@
 import React from "react";
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, View, Text, Button, SafeAreaView } from "react-native";
+import { useSelector } from "react-redux";
 
 const Index = ({ navigation }) => {
+  const user = useSelector((state) => state.authUser.user);
+
+  console.log("user", user);
   const handleLogin = () => {
     // ทำการ login หรือตรวจสอบข้อมูลของผู้ใช้ที่นี่
 
