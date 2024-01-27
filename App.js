@@ -1,6 +1,6 @@
 // App.js
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View, SafeAreaView } from "react-native";
+import { StyleSheet, Text, View, SafeAreaView, Button } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 import {
@@ -18,39 +18,35 @@ import { configureStore } from "./redux/store"; // import configureStore แท�
 
 import Home from "./router/routerHome";
 import Login from "./screens/Login";
+import Index from "./screens/Index";
+import Content from "./screens/Content";
+import ForgotPassword from "./screens/ForgotPassword";
+import Register from "./screens/Register";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
-/* function MyStack() {
-  return (
-    <NavigationContainer>
-      <Stack.Navigator
-        initialRouteName="Login"
-        screenOptions={{ headerShown: false }}
-      >
-        <Stack.Screen name="Login" component={Login} />
-        <Tab.Screen
-          name="Home"
-          component={Home}
-          options={{
-            tabBarIcon: ({ size, color }) => (
-              <MaterialCommunityIcons name="home" color={color} size={size} />
-            ),
-          }}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
-} */
-function HomeStack() {
+function HomeStack({ navigation }) {
   return (
     <Stack.Navigator>
       <Stack.Screen
         name="Home"
         component={Home}
         options={{
-          headerShown: false, // ซ่อน Navbar ในหน้า Home
+          headerShown: false,
+        }}
+      />
+    </Stack.Navigator>
+  );
+}
+function ContentStack({ navigation }) {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Content"
+        component={Content}
+        options={{
+          headerShown: false,
         }}
       />
     </Stack.Navigator>
@@ -60,7 +56,26 @@ function HomeStack() {
 function MyTabs() {
   return (
     <Tab.Navigator>
-      <Tab.Screen name="Home" component={HomeStack} />
+      <Tab.Screen
+        name="Home"
+        component={HomeStack}
+        options={{
+          headerShown: false,
+          tabBarIcon: ({ size, color }) => (
+            <MaterialCommunityIcons name="home" color={color} size={size} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Content"
+        component={ContentStack}
+        options={{
+          headerShown: false,
+          tabBarIcon: ({ size, color }) => (
+            <MaterialCommunityIcons name="home" color={color} size={size} />
+          ),
+        }}
+      />
     </Tab.Navigator>
   );
 }
@@ -72,10 +87,13 @@ export default function App() {
       <PersistGate loading={null} persistor={persister}>
         <NavigationContainer>
           <Stack.Navigator
-            initialRouteName="Login"
+            initialRouteName="Index"
             screenOptions={{ headerShown: false }}
           >
+            <Stack.Screen name="Index" component={Index} />
             <Stack.Screen name="Login" component={Login} />
+            <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
+            <Stack.Screen name="Register" component={Register} />
             <Stack.Screen name="Home" component={MyTabs} />
           </Stack.Navigator>
         </NavigationContainer>
@@ -83,10 +101,3 @@ export default function App() {
     </Provider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-  },
-});
