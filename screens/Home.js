@@ -1,6 +1,6 @@
 // Home.js
 import React from "react";
-import { View, Text, Button } from "react-native";
+import { View, Text, Button, SafeAreaView } from "react-native";
 import { useDispatch } from "react-redux";
 import { logoutUser } from "../redux/auth"; // ต้องการ import logoutUser
 
@@ -12,10 +12,10 @@ const Home = () => {
   };
 
   return (
-    <View>
+    <SafeAreaView>
       <Text>Welcome to Home Screen</Text>
       <Button title="Logout" onPress={handleLogout} />
-    </View>
+    </SafeAreaView>
   );
 };
 

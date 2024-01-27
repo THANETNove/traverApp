@@ -23,7 +23,9 @@ function App() {
         name="HomeManu"
         component={HomeMaun}
         options={{
-          title: "Manu",
+          headerShown: false,
+          gestureEnabled: false,
+          cardOverlayEnabled: false,
         }}
       />
       {/*  <HomeStack.Screen name="Home" component={Home} />
