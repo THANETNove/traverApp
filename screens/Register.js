@@ -54,11 +54,16 @@ const Register = ({ navigation }) => {
     if (!formData.password.trim()) {
       newErrors.password = "กรุณากรอบข้อมูล";
       isValid = false;
+    } else if (formData.password.trim().length < 6) {
+      newErrors.password = "Password ต้องมีความยาวอย่างน้อย 6 ตัวอักษร";
+      isValid = false;
     }
+
     if (!formData.confirm_password.trim()) {
       newErrors.confirm_password = "กรุณากรอบข้อมูล";
       isValid = false;
     }
+
     if (formData.password.trim() !== formData.confirm_password.trim()) {
       newErrors.confirm_password = "รหัสผ่านไม่ตรงกัน";
       isValid = false;

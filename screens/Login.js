@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   View,
@@ -9,23 +9,55 @@ import {
   Pressable,
   SafeAreaView,
 } from "react-native";
-import { useDispatch } from "react-redux";
+
+import { useSelector, useDispatch } from "react-redux";
 import { loginUser } from "../redux/auth"; // ต้องการ import logoutUser
 import logo from "../assets/LogoLB.png";
 
 const Login = ({ navigation }) => {
   const dispatch = useDispatch();
+  const { user, statusUser } = useSelector((state) => state.authUser);
 
-  const [text, onChangeText] = React.useState("");
+  const [email, onChangeEmail] = React.useState("");
   const [password, onPassword] = React.useState("");
-  const [number, onChangeNumber] = React.useState("");
+
+  function isValidEmail(email) {
+    // ใช้ regular expression เพื่อตรวจสอบรูปแบบของอีเมล
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  }
+
+  const [errors, setErrors] = useState({
+    password: "",
+    email: "",
+  });
+  const validate = () => {
+    let isValid = true;
+    const newErrors = {};
+
+    // Email validation
+
+    if (!email.trim()) {
+      newErrors.email = "กรุณากรอบข้อมูล";
+      isValid = false;
+    } else if (!isValidEmail(email)) {
+      newErrors.email = "รูปแบบอีเมลไม่ถูกต้อง";
+      isValid = false;
+    }
+    if (!password.trim()) {
+      newErrors.password = "กรุณากรอบข้อมูล";
+      isValid = false;
+    }
+
+    setErrors(newErrors);
+    return isValid;
+  };
 
   const handleLogin = () => {
     // ทำการ login หรือตรวจสอบข้อมูลของผู้ใช้ที่นี่
-    const dataAuth = [{ user: "thanet" }, { password: "12345" }];
-    // เมื่อ login สำเร็จ ให้ navigate ไปยังหน้า Home
-    dispatch(loginUser(dataAuth));
-    navigation.navigate("Home");
+    if (validate()) {
+      dispatch(loginUser(email, password, dispatch));
+    }
   };
   const handleForgot = () => {
     navigation.navigate("ForgotPassword");
@@ -33,6 +65,13 @@ const Login = ({ navigation }) => {
   const handleRegister = () => {
     navigation.navigate("Register");
   };
+
+  useEffect(() => {
+    if (user != null) {
+      navigation.navigate("Home");
+    }
+  }, [user]);
+
   return (
     <View style={styles.container}>
       <Image
@@ -42,16 +81,20 @@ const Login = ({ navigation }) => {
       <View style={styles.boxIndex}>
         <TextInput
           style={styles.input}
-          onChangeText={onChangeText}
-          value={text}
-          placeholder={"Username"}
+          onChangeText={(text) => onChangeEmail(text.toLowerCase())}
+          value={email}
+          placeholder={"Email"}
         />
+        {errors.email && <Text style={styles.error}>{errors.email}</Text>}
+
         <TextInput
           style={styles.input}
-          onChangeText={onPassword}
+          onChangeText={(text) => onPassword(text.toLowerCase())}
           value={password}
           placeholder={"Password"}
+          secureTextEntry={true}
         />
+        {errors.password && <Text style={styles.error}>{errors.password}</Text>}
         <Pressable onPress={handleForgot}>
           <Text style={styles.forgotPassword}>ลืมรหัสผ่าน</Text>
         </Pressable>
@@ -118,5 +161,10 @@ const styles = StyleSheet.create({
   },
   create: {
     color: "#0085FF",
+  },
+  error: {
+    textAlign: "left",
+    color: "red",
+    marginBottom: 8,
   },
 });

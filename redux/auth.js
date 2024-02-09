@@ -10,44 +10,19 @@ const url = getUrl();
 
 export const types = {
   LOGIN_USER: "LOGIN_USER",
+  LOGIN_SUCCEED: "LOGIN_SUCCEED",
+  LOGIN_FAIL: "LOGIN_FAIL",
+  LOGIN_USER: "LOGIN_USER",
   LOGOUT_USER: "LOGOUT_USER",
   REGISTER: "REGISTER",
   REGISTER_SUCCEED: "REGISTER_SUCCEED",
   REGISTER_FAIL: "REGISTER_FAIL",
 };
 
-export const loginUser = async (auth) => {
-  try {
-    const params = {
-      isAdd: true,
-      auth: auth,
-    };
-    const response = await axios.get(`${url}/getProductTypeListId.php`, {
-      params,
-    });
-    if (response.data.message) {
-      return {
-        type: types.LOGIN_USER,
-        payload: response.data,
-      };
-    } else {
-      return {
-        type: types.LOGIN_USER,
-        payload: {
-          status: "unknown",
-        },
-      };
-    }
-  } catch (error) {
-    return {
-      type: types.LOGIN_USER,
-      payload: {
-        status: "error",
-        message: error.message,
-      },
-    };
-  }
-};
+export const loginUser = (email, password, dispatch) => ({
+  type: types.LOGIN_USER,
+  action: login_api(email, password, dispatch),
+});
 
 export const logoutUser = () => ({
   type: types.LOGOUT_USER,
@@ -57,6 +32,39 @@ export const registerUser = (e, dispatch) => ({
   type: types.REGISTER,
   action: register_api(e, dispatch),
 });
+
+export const login_api = async (email, password, dispatch) => {
+  console.log("email, password, dispatch", email, password);
+  const formData = new FormData(); // ประกาศตัวแปร formData
+  formData.append("isAdd", true);
+  formData.append("email", email);
+  formData.append("password", password);
+
+  try {
+    const response = await axios.post(`${url}/login.php`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data;charset=utf-8",
+      },
+    });
+
+    if (response.data.message) {
+      dispatch({
+        type: types.LOGIN_SUCCEED,
+        payload: response.data.data, // ส่งข้อมูลข้อผิดพลาดไปยัง reducer
+      });
+    } else {
+      dispatch({
+        type: types.LOGIN_FAIL,
+        payload: "fail", // ส่งข้อมูลข้อผิดพลาดไปยัง reducer
+      });
+    }
+  } catch (error) {
+    return {
+      type: types.REGISTER_FAIL,
+      payload: "error",
+    };
+  }
+};
 
 export const register_api = async (e, dispatch) => {
   const formData = new FormData();
@@ -71,7 +79,7 @@ export const register_api = async (e, dispatch) => {
         "Content-Type": "multipart/form-data;charset=utf-8",
       },
     });
-  
+
     if (response.data.message) {
       dispatch({
         type: types.REGISTER_SUCCEED,
@@ -100,12 +108,18 @@ const INIT_STATE = {
 export function reducer(state = INIT_STATE, action) {
   switch (action.type) {
     case types.LOGIN_USER:
+      return { ...state, statusUser: "load" };
+    case types.LOGIN_SUCCEED:
       return {
         ...state,
-        user: action.payload.auth,
-        statusUser: "success",
+        user: action.payload,
+        statusUser: "success", // Set statusUser to "failure"
       };
-
+    case types.REGISTER_FAIL:
+      return {
+        ...state,
+        statusUser: action.payload, // Set statusUser to "failure"
+      };
     case types.LOGOUT_USER:
       return {
         ...state,
@@ -113,7 +127,7 @@ export function reducer(state = INIT_STATE, action) {
         statusUser: "default",
       };
     case types.REGISTER:
-      return state; // No need to change here
+      return { ...state, statusUser: "load" }; // No need to change here
     case types.REGISTER_SUCCEED:
       return {
         ...state,
