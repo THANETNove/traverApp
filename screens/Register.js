@@ -167,6 +167,7 @@ const Register = ({ navigation }) => {
             }
             value={formData.password}
             placeholder={"Password"}
+            secureTextEntry={true}
           />
           {errors.password && (
             <Text style={styles.error}>{errors.password}</Text>
@@ -179,6 +180,7 @@ const Register = ({ navigation }) => {
             }
             value={formData.confirm_password}
             placeholder={"Confirm Password"}
+            secureTextEntry={true}
           />
           {errors.confirm_password && (
             <Text style={styles.error}>{errors.confirm_password}</Text>
