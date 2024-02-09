@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   View,
@@ -10,12 +10,16 @@ import {
   Image,
   ScrollView,
 } from "react-native";
+import { registerUser, logoutUser } from "../redux/auth";
 import Icon from "react-native-vector-icons/FontAwesome";
 import logo from "../assets/LogoLB.png";
 
+import { useSelector, useDispatch } from "react-redux";
+
 const Register = ({ navigation }) => {
+  const { user, statusUser } = useSelector((state) => state.authUser);
+  const dispatch = useDispatch();
   const [formData, setFormData] = useState({
-    username: "",
     password: "",
     confirm_password: "",
     first_name: "",
@@ -27,7 +31,6 @@ const Register = ({ navigation }) => {
     zip_code: "",
   });
   const [errors, setErrors] = useState({
-    username: "",
     password: "",
     confirm_password: "",
     first_name: "",
@@ -35,19 +38,19 @@ const Register = ({ navigation }) => {
     address: "",
     subdistrict: "",
     district: "",
-    provinc: "",
+    province: "",
     zip_code: "",
   });
+  function isValidEmail(email) {
+    // ใช้ regular expression เพื่อตรวจสอบรูปแบบของอีเมล
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  }
 
   const validate = () => {
     let isValid = true;
     const newErrors = {};
 
-    // customer_code validation
-    if (!formData.username.trim()) {
-      newErrors.username = "กรุณากรอบข้อมูล";
-      isValid = false;
-    }
     if (!formData.password.trim()) {
       newErrors.password = "กรุณากรอบข้อมูล";
       isValid = false;
@@ -65,6 +68,7 @@ const Register = ({ navigation }) => {
       isValid = false;
     }
     // Email validation
+
     if (!formData.email.trim()) {
       newErrors.email = "กรุณากรอบข้อมูล";
       isValid = false;
@@ -98,7 +102,6 @@ const Register = ({ navigation }) => {
   };
 
   const handleChange = (key, value) => {
-    console.log("key, value", key, value);
     setFormData((prevState) => ({
       ...prevState,
       [key]: value,
@@ -107,18 +110,29 @@ const Register = ({ navigation }) => {
 
   const handleLogin = () => {
     // ทำการ login หรือตรวจสอบข้อมูลของผู้ใช้ที่นี่
-
+    dispatch(logoutUser());
     if (validate()) {
-      // navigation.navigate("Home");
+      dispatch(registerUser(formData, dispatch));
     }
-    // เมื่อ login สำเร็จ ให้ navigate ไปยังหน้า Home
   };
   const handleGoBack = () => {
-    // ทำการ login หรือตรวจสอบข้อมูลของผู้ใช้ที่นี่
-
-    // เมื่อ login สำเร็จ ให้ navigate ไปยังหน้า Home
     navigation.navigate("Login");
   };
+
+  useEffect(() => {
+    if (user != null) {
+      navigation.navigate("Home");
+    }
+  }, [user]);
+
+  useEffect(() => {
+    if (statusUser == "email_exists") {
+      setErrors((prevState) => ({
+        ...prevState,
+        email: "Email already exists",
+      }));
+    }
+  }, [statusUser]);
 
   return (
     <View style={styles.container}>
@@ -140,17 +154,17 @@ const Register = ({ navigation }) => {
         <View style={styles.boxIndex}>
           <TextInput
             style={styles.input}
-            onChangeText={(text) => handleChange("username", text)}
-            value={formData.username}
-            placeholder={"Username"}
+            onChangeText={(text) => handleChange("email", text.toLowerCase())}
+            value={formData.email}
+            placeholder={"Email"}
           />
-          {errors.username && (
-            <Text style={styles.error}>{errors.username}</Text>
-          )}
+          {errors.email && <Text style={styles.error}>{errors.email}</Text>}
 
           <TextInput
             style={styles.input}
-            onChangeText={(text) => handleChange("password", text)}
+            onChangeText={(text) =>
+              handleChange("password", text.toLowerCase())
+            }
             value={formData.password}
             placeholder={"Password"}
           />
@@ -160,7 +174,9 @@ const Register = ({ navigation }) => {
 
           <TextInput
             style={styles.input}
-            onChangeText={(text) => handleChange("confirm_password", text)}
+            onChangeText={(text) =>
+              handleChange("confirm_password", text.toLowerCase())
+            }
             value={formData.confirm_password}
             placeholder={"Confirm Password"}
           />
@@ -170,7 +186,9 @@ const Register = ({ navigation }) => {
 
           <TextInput
             style={styles.input}
-            onChangeText={(text) => handleChange("first_name", text)}
+            onChangeText={(text) =>
+              handleChange("first_name", text.toLowerCase())
+            }
             value={formData.first_name}
             placeholder={"ชื่อ นามสกุล"}
           />
@@ -180,15 +198,7 @@ const Register = ({ navigation }) => {
 
           <TextInput
             style={styles.input}
-            onChangeText={(text) => handleChange("email", text)}
-            value={formData.email}
-            placeholder={"Email"}
-          />
-          {errors.email && <Text style={styles.error}>{errors.email}</Text>}
-
-          <TextInput
-            style={styles.input}
-            onChangeText={(text) => handleChange("address", text)}
+            onChangeText={(text) => handleChange("address", text.toLowerCase())}
             value={formData.address}
             placeholder={"ที่อยู่"}
           />
@@ -196,7 +206,9 @@ const Register = ({ navigation }) => {
 
           <TextInput
             style={styles.input}
-            onChangeText={(text) => handleChange("subdistrict", text)}
+            onChangeText={(text) =>
+              handleChange("subdistrict", text.toLowerCase())
+            }
             value={formData.subdistrict}
             placeholder={"เเขวง/ตำบล"}
           />
@@ -206,7 +218,9 @@ const Register = ({ navigation }) => {
 
           <TextInput
             style={styles.input}
-            onChangeText={(text) => handleChange("district", text)}
+            onChangeText={(text) =>
+              handleChange("district", text.toLowerCase())
+            }
             value={formData.district}
             placeholder={"เขต/อำเภอ"}
           />
@@ -216,15 +230,19 @@ const Register = ({ navigation }) => {
 
           <TextInput
             style={styles.input}
-            onChangeText={(text) => handleChange("provinc", text)}
+            onChangeText={(text) => handleChange("provinc", text.toLowerCase())}
             value={formData.provinc}
             placeholder={"จังหวัด"}
           />
-          {errors.provinc && <Text style={styles.error}>{errors.provinc}</Text>}
+          {errors.provinc && (
+            <Text style={styles.error}>{errors.province}</Text>
+          )}
 
           <TextInput
             style={styles.input}
-            onChangeText={(text) => handleChange("zip_code", text)}
+            onChangeText={(text) =>
+              handleChange("zip_code", text.toLowerCase())
+            }
             value={formData.zip_code}
             placeholder={"รหัสไปรษณีย์"}
           />

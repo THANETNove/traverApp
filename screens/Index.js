@@ -15,7 +15,7 @@ import logo from "../assets/LogoLB.png";
 const Index = ({ navigation }) => {
   const user = useSelector((state) => state.authUser.user);
 
-  console.log("user", user);
+  /*  console.log("user", user); */
   const handleLogin = () => {
     // ทำการ login หรือตรวจสอบข้อมูลของผู้ใช้ที่นี่
 
