@@ -22,6 +22,7 @@ import Index from "./screens/Index";
 import Content from "./screens/Content";
 import ForgotPassword from "./screens/ForgotPassword";
 import Register from "./screens/Register";
+import UpPassword from "./screens/UpPassword";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -94,6 +95,7 @@ export default function App() {
             <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
             <Stack.Screen name="Register" component={Register} />
+            <Stack.Screen name="UpPassword" component={UpPassword} />
             <Stack.Screen name="Home" component={MyTabs} />
           </Stack.Navigator>
         </NavigationContainer>

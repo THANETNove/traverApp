@@ -12,67 +12,56 @@ import {
 } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import logo from "../assets/LogoLB.png";
-import { clickEmail, logoutUser, clearStatus } from "../redux/auth";
+import { updatePassword, logoutUser } from "../redux/auth";
 import { useSelector, useDispatch } from "react-redux";
 
-const ForgotPassword = ({ navigation }) => {
+const UpPassword = ({ navigation }) => {
   const dispatch = useDispatch();
-  const { statusEmail } = useSelector((state) => state.authUser);
-  const [email, onChangeEmail] = React.useState("");
+  const { statusUpdatePassword, idEmail } = useSelector(
+    (state) => state.authUser
+  );
+  const [password, onPassword] = React.useState("");
 
-  function isValidEmail(email) {
-    // ใช้ regular expression เพื่อตรวจสอบรูปแบบของอีเมล
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  }
-  const [errors, setErrors] = useState({
-    email: "",
+  const [errorsPass, setErrorsPass] = useState({
+    password: "",
   });
 
-  const validate = () => {
+  const validatePass = () => {
     let isValid = true;
     const newErrors = {};
-    if (!email.trim()) {
-      newErrors.email = "กรุณากรอบข้อมูล";
+    if (!password.trim()) {
+      newErrors.password = "กรุณากรอบข้อมูล";
       isValid = false;
-    } else if (!isValidEmail(email)) {
-      newErrors.email = "รูปแบบอีเมลไม่ถูกต้อง";
+    } else if (password.trim().length < 6) {
+      newErrors.password = "Password ต้องมีความยาวอย่างน้อย 6 ตัวอักษร";
       isValid = false;
     }
-    setErrors(newErrors);
+
+    setErrorsPass(newErrors);
     return isValid;
   };
 
   const handleGoBack = () => {
-    navigation.navigate("Login");
+    navigation.navigate("ForgotPassword");
   };
 
-  const handleForgotPassword = () => {
-    dispatch(clearStatus());
-    if (validate()) {
-      dispatch(clickEmail(email, dispatch));
+  const handleNewPassword = () => {
+    if (validatePass()) {
+      dispatch(updatePassword(idEmail && idEmail, password, dispatch));
     }
   };
 
   useEffect(() => {
-    setErrors((prevState) => ({
-      ...prevState,
-      email: "",
-    }));
+    /*    if (statusUpdatePassword == "true") {
+      navigation.navigate("Login");
+    } */
+
+    console.log("statusUpdatePassword", statusUpdatePassword);
+  }, [statusUpdatePassword]);
+
+  useEffect(() => {
+    console.log("idEmail", idEmail);
   }, []);
-
-  useEffect(() => {
-    if (statusEmail == "true") {
-      navigation.navigate("UpPassword");
-    }
-    if (statusEmail == "false") {
-      setErrors((prevState) => ({
-        ...prevState,
-        email: "Email ไม่ถูกต้อง กรุณาตรวจ Email",
-      }));
-    }
-  }, [statusEmail]);
-
   return (
     <View style={styles.container}>
       <Pressable onPress={handleGoBack}>
@@ -94,13 +83,16 @@ const ForgotPassword = ({ navigation }) => {
         <View style={styles.boxIndex}>
           <TextInput
             style={styles.input}
-            onChangeText={(text) => onChangeEmail(text.toLowerCase())}
-            value={email}
-            placeholder={"ใส่ Email ที่ใช้ในการสมัครสมาชิก"}
+            onChangeText={(text) => onPassword(text.toLowerCase())}
+            value={password}
+            placeholder={"Password"}
+            secureTextEntry={true}
           />
-          {errors.email && <Text style={styles.error}>{errors.email}</Text>}
+          {errorsPass.password && (
+            <Text style={styles.error}>{errorsPass.password}</Text>
+          )}
 
-          <Pressable style={styles.button} onPress={handleForgotPassword}>
+          <Pressable style={styles.button} onPress={handleNewPassword}>
             <Text style={styles.textLogin}>ยืนยัน</Text>
           </Pressable>
         </View>
@@ -108,7 +100,7 @@ const ForgotPassword = ({ navigation }) => {
     </View>
   );
 };
-export default ForgotPassword;
+export default UpPassword;
 
 const styles = StyleSheet.create({
   container: {

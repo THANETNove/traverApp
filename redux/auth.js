@@ -17,6 +17,13 @@ export const types = {
   REGISTER: "REGISTER",
   REGISTER_SUCCEED: "REGISTER_SUCCEED",
   REGISTER_FAIL: "REGISTER_FAIL",
+  CLICK_EMAIL: "CLICK_EMAIL",
+  CLICK_EMAIL_SUCCEED: "CLICK_EMAIL_SUCCEED",
+  CLICK_EMAIL_FAIL: "CLICK_EMAIL_FAIL",
+  NEW_PASSWORD: "NEW_PASSWORD",
+  NEW_PASSWORD_SUCCEED: "NEW_PASSWORD_SUCCEED",
+  NEW_PASSWORD_FAIL: "NEW_PASSWORD_FAIL",
+  CLEAR_STATUS: "CLEAR_STATUS",
 };
 
 export const loginUser = (email, password, dispatch) => ({
@@ -27,10 +34,21 @@ export const loginUser = (email, password, dispatch) => ({
 export const logoutUser = () => ({
   type: types.LOGOUT_USER,
 });
+export const clearStatus = () => ({
+  type: types.CLEAR_STATUS,
+});
 
 export const registerUser = (e, dispatch) => ({
   type: types.REGISTER,
   action: register_api(e, dispatch),
+});
+export const clickEmail = (email, dispatch) => ({
+  type: types.CLICK_EMAIL,
+  action: clickEmail_api(email, dispatch),
+});
+export const updatePassword = (id, email, dispatch) => ({
+  type: types.NEW_PASSWORD,
+  action: updatePassword_api(id, email, dispatch),
 });
 
 export const login_api = async (email, password, dispatch) => {
@@ -92,7 +110,6 @@ export const register_api = async (e, dispatch) => {
       });
     }
   } catch (error) {
-    console.error("Error registering user:", error);
     return {
       type: types.REGISTER_FAIL,
       payload: error,
@@ -100,9 +117,60 @@ export const register_api = async (e, dispatch) => {
   }
 };
 
+export const clickEmail_api = async (email, dispatch) => {
+  const formData = new FormData();
+  formData.append("isAdd", true);
+  formData.append("email", email);
+
+  try {
+    const response = await axios.post(`${url}/clickEmail.php`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data;charset=utf-8",
+      },
+    });
+    if (response.data.message) {
+      dispatch({
+        type: types.CLICK_EMAIL_SUCCEED,
+        payload: response.data, // ส่งข้อมูลข้อผิดพลาดไปยัง reducer
+      });
+    }
+  } catch (error) {
+    return {
+      type: types.CLICK_EMAIL_FAIL,
+      payload: error,
+    };
+  }
+};
+export const updatePassword_api = async (id, password, dispatch) => {
+  const formData = new FormData();
+  formData.append("isAdd", true);
+  formData.append("password", password);
+
+  try {
+    const response = await axios.post(`${url}/updatePassword.php`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data;charset=utf-8",
+      },
+    });
+    if (response.data.message) {
+      dispatch({
+        type: types.NEW_PASSWORD_SUCCEED,
+        payload: response.data.message, // ส่งข้อมูลข้อผิดพลาดไปยัง reducer
+      });
+    }
+  } catch (error) {
+    return {
+      type: types.NEW_PASSWORD_FAIL,
+      payload: response.data.error,
+    };
+  }
+};
+
 const INIT_STATE = {
   user: null,
   statusUser: "default",
+  statusEmail: "default",
+  idEmail: null,
 };
 
 export function reducer(state = INIT_STATE, action) {
@@ -115,6 +183,11 @@ export function reducer(state = INIT_STATE, action) {
         user: action.payload,
         statusUser: "success", // Set statusUser to "failure"
       };
+    case types.LOGIN_FAIL:
+      return {
+        ...state,
+        statusUser: action.payload, // Set statusUser to "failure"
+      };
     case types.REGISTER_FAIL:
       return {
         ...state,
@@ -125,6 +198,9 @@ export function reducer(state = INIT_STATE, action) {
         ...state,
         user: null,
         statusUser: "default",
+        statusEmail: "default",
+        idEmail: null,
+        statusUpdatePassword: "default",
       };
     case types.REGISTER:
       return { ...state, statusUser: "load" }; // No need to change here
@@ -139,7 +215,30 @@ export function reducer(state = INIT_STATE, action) {
         ...state,
         statusUser: action.payload, // Set statusUser to "failure"
       };
-
+    case types.REGISTER:
+      return { ...state, statusEmail: "load" };
+    case types.CLICK_EMAIL_SUCCEED:
+      return {
+        ...state,
+        statusEmail: action.payload.message,
+        idEmail: action.payload.data,
+      };
+    case types.CLICK_EMAIL_FAIL:
+      return { ...state, statusEmail: action.payload };
+    case types.NEW_PASSWORD:
+      return { ...state, statusUpdatePassword: "load" };
+    case types.NEW_PASSWORD_SUCCEED:
+      return { ...state, statusUpdatePassword: action.payload };
+    case types.NEW_PASSWORD_FAIL:
+      return { ...state, statusUpdatePassword: action.payload };
+    case types.CLEAR_STATUS:
+      return {
+        ...state,
+        statusUser: "default",
+        statusEmail: "default",
+        idEmail: null,
+        statusUpdatePassword: "default",
+      };
     default:
       return { ...state };
   }

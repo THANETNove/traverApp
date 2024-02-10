@@ -11,7 +11,7 @@ import {
 } from "react-native";
 
 import { useSelector, useDispatch } from "react-redux";
-import { loginUser } from "../redux/auth"; // ต้องการ import logoutUser
+import { loginUser, logoutUser } from "../redux/auth"; // ต้องการ import logoutUser
 import logo from "../assets/LogoLB.png";
 
 const Login = ({ navigation }) => {
@@ -60,6 +60,7 @@ const Login = ({ navigation }) => {
     }
   };
   const handleForgot = () => {
+    dispatch(logoutUser());
     navigation.navigate("ForgotPassword");
   };
   const handleRegister = () => {
@@ -70,7 +71,14 @@ const Login = ({ navigation }) => {
     if (user != null) {
       navigation.navigate("Home");
     }
-  }, [user]);
+    if (statusUser == "fail") {
+      setErrors((prevState) => ({
+        ...prevState,
+        email: "กรุณาตรวจสอบ Email Password ใหม่",
+      }));
+    }
+    console.log("statusUser", statusUser);
+  }, [user, statusUser]);
 
   return (
     <View style={styles.container}>

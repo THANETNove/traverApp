@@ -13,7 +13,7 @@ const Home = ({ navigation }) => {
     dispatch(logoutUser());
     navigation.navigate("Index");
   };
-  console.log("Home User", user);
+
 
   return (
     <SafeAreaView>
