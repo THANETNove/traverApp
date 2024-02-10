@@ -47,14 +47,16 @@ const UpPassword = ({ navigation }) => {
 
   const handleNewPassword = () => {
     if (validatePass()) {
-      dispatch(updatePassword(idEmail && idEmail, password, dispatch));
+      if (idEmail) {
+        dispatch(updatePassword(idEmail, password, dispatch));
+      }
     }
   };
 
   useEffect(() => {
-    /*    if (statusUpdatePassword == "true") {
+    if (statusUpdatePassword == "true") {
       navigation.navigate("Login");
-    } */
+    }
 
     console.log("statusUpdatePassword", statusUpdatePassword);
   }, [statusUpdatePassword]);

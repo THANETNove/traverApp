@@ -144,6 +144,7 @@ export const clickEmail_api = async (email, dispatch) => {
 export const updatePassword_api = async (id, password, dispatch) => {
   const formData = new FormData();
   formData.append("isAdd", true);
+  formData.append("id", id);
   formData.append("password", password);
 
   try {
