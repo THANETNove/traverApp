@@ -27,7 +27,7 @@ const Register = ({ navigation }) => {
     address: "",
     subdistrict: "",
     district: "",
-    provinc: "",
+    province: "",
     zip_code: "",
   });
   const [errors, setErrors] = useState({
@@ -93,8 +93,8 @@ const Register = ({ navigation }) => {
       newErrors.district = "กรุณากรอบข้อมูล";
       isValid = false;
     }
-    if (!formData.provinc.trim()) {
-      newErrors.provinc = "กรุณากรอบข้อมูล";
+    if (!formData.province.trim()) {
+      newErrors.province = "กรุณากรอบข้อมูล";
       isValid = false;
     }
     if (!formData.zip_code.trim()) {
@@ -237,11 +237,13 @@ const Register = ({ navigation }) => {
 
           <TextInput
             style={styles.input}
-            onChangeText={(text) => handleChange("provinc", text.toLowerCase())}
-            value={formData.provinc}
+            onChangeText={(text) =>
+              handleChange("province", text.toLowerCase())
+            }
+            value={formData.province}
             placeholder={"จังหวัด"}
           />
-          {errors.provinc && (
+          {errors.province && (
             <Text style={styles.error}>{errors.province}</Text>
           )}
 

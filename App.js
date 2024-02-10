@@ -71,9 +71,14 @@ function MyTabs() {
         name="Content"
         component={ContentStack}
         options={{
+          title: "Profile",
           headerShown: false,
           tabBarIcon: ({ size, color }) => (
-            <MaterialCommunityIcons name="home" color={color} size={size} />
+            <MaterialCommunityIcons
+              name="account-circle"
+              color={color}
+              size={size}
+            />
           ),
         }}
       />
