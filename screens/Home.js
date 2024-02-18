@@ -1,70 +1,24 @@
-// Home.js
-import React, { useEffect, useState } from "react";
-import {
-  View,
-  Text,
-  Image,
-  Button,
-  SafeAreaView,
-  ScrollView,
-  Pressable,
-  StyleSheet,
-} from "react-native";
-import { useDispatch } from "react-redux";
-import { logoutUser } from "../redux/auth"; // ต้องการ import logoutUser
-import { useSelector } from "react-redux";
-import logo from "../assets/LogoLB.png";
+import React, { useRef, useEffect, useState } from "react";
+import { StyleSheet, View, Text, Image, SafeAreaView } from "react-native";
+import Carousel from "react-native-snap-carousel";
 
-const Home = ({ navigation }) => {
-  return (
-    <SafeAreaView>
-      <Text>HOME</Text>
-    </SafeAreaView>
-  );
+const Home = () => {
+  return <SafeAreaView style={styles.container}></SafeAreaView>;
 };
-
-export default Home;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
     alignItems: "center",
   },
-  box_logo: {
-    display: "flex",
-    alignItems: "center",
-  },
-  logo_image: {
-    width: 150,
-    height: 150,
-    marginBottom: 32,
-  },
-  boxIndex: {
+  viewPager: {
     width: "100%",
-    paddingHorizontal: "10%",
-    display: "flex",
-    marginBottom: 120,
+    height: 200,
   },
-  text: {
-    backgroundColor: "#FFFFFF",
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    fontSize: 18,
-    marginVertical: 4,
-  },
-  logout: {
-    marginTop: 32,
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    width: 150,
-    height: 45,
-    backgroundColor: "#0085FF",
-    borderRadius: 50,
-  },
-  textLogout: {
-    fontSize: 16,
-    color: "#FFFFFF",
+  image: {
+    height: "100%",
+    width: "100%",
   },
 });
+
+export default Home;

@@ -31,7 +31,7 @@ const Content = ({ navigation }) => {
   }, [user]);
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={styles.container}>
       <ScrollView>
         <View style={styles.box_logo}>
           <Image
@@ -70,7 +70,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    alignItems: "center",
   },
   box_logo: {
     display: "flex",
