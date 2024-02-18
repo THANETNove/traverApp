@@ -34,23 +34,23 @@ const Home = ({ navigation }) => {
   };
 
   return (
-    <ScrollView
-      showsVerticalScrollIndicator={false}
-      showsHorizontalScrollIndicator={false}
-    >
-      <SafeAreaView style={styles.container}>
-        <View style={styles.boxCarousel}>
-          <Carousel
-            data={images}
-            renderItem={renderItem}
-            sliderWidth={windowWidth}
-            itemWidth={windowWidth}
-            autoplay={true}
-            loop={true}
-            layout={"stack"}
-            layoutCardOffset={`18`}
-          />
-        </View>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.boxCarousel}>
+        <Carousel
+          data={images}
+          renderItem={renderItem}
+          sliderWidth={windowWidth}
+          itemWidth={windowWidth}
+          autoplay={true}
+          loop={true}
+          layout={"stack"}
+          layoutCardOffset={`18`}
+        />
+      </View>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
+      >
         <Text style={styles.category}>หมวดหมู่แหล่งท่องเที่ยว</Text>
         <Pressable style={styles.button} onPress={() => handleBoxContent(1)}>
           <Text style={styles.textButton}>สถานที่แหล่งท่องเที่ยว</Text>
@@ -61,8 +61,8 @@ const Home = ({ navigation }) => {
         <Pressable style={styles.button} onPress={() => handleBoxContent(3)}>
           <Text style={styles.textButton}>สถานที่แหล่งท่องเที่ยว</Text>
         </Pressable>
-      </SafeAreaView>
-    </ScrollView>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   category: {
-    marginTop: 32,
+    marginTop: 44,
     fontSize: 24,
     marginBottom: 16,
   },
