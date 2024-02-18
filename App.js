@@ -19,10 +19,11 @@ import { configureStore } from "./redux/store"; // import configureStore แท�
 import Home from "./router/routerHome";
 import Login from "./screens/Login";
 import Index from "./screens/Index";
-import Content from "./screens/Content";
+import Profile from "./screens/Profile";
 import ForgotPassword from "./screens/ForgotPassword";
 import Register from "./screens/Register";
 import UpPassword from "./screens/UpPassword";
+import BoxContent from "./screens/BoxContent";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -37,6 +38,13 @@ function HomeStack({ navigation }) {
           headerShown: false,
         }}
       />
+      <Stack.Screen
+        name="BoxContent"
+        component={BoxContent}
+        options={{
+          headerShown: false,
+        }}
+      />
     </Stack.Navigator>
   );
 }
@@ -44,8 +52,8 @@ function ContentStack({ navigation }) {
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name="Content"
-        component={Content}
+        name="Profile"
+        component={Profile}
         options={{
           headerShown: false,
         }}
@@ -67,8 +75,9 @@ function MyTabs() {
           ),
         }}
       />
+
       <Tab.Screen
-        name="Content"
+        name="Profile"
         component={ContentStack}
         options={{
           title: "Profile",

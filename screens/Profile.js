@@ -15,7 +15,7 @@ import { logoutUser } from "../redux/auth"; // ต้องการ import logo
 import { useSelector } from "react-redux";
 import logo from "../assets/LogoLB.png";
 
-const Content = ({ navigation }) => {
+const Profile = ({ navigation }) => {
   const user = useSelector((state) => state.authUser.user);
   const dispatch = useDispatch();
 
@@ -32,7 +32,10 @@ const Content = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
+      >
         <View style={styles.box_logo}>
           <Image
             source={logo} // Replace with the actual path to your local image
@@ -64,7 +67,7 @@ const Content = ({ navigation }) => {
   );
 };
 
-export default Content;
+export default Profile;
 
 const styles = StyleSheet.create({
   container: {

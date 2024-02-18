@@ -74,7 +74,10 @@ const UpPassword = ({ navigation }) => {
           color="#0085FF"
         />
       </Pressable>
-      <ScrollView>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
+      >
         <View style={styles.box_logo}>
           <Image
             source={logo} // Replace with the actual path to your local image
