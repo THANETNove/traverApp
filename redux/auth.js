@@ -52,7 +52,7 @@ export const updatePassword = (id, email, dispatch) => ({
 });
 
 export const login_api = async (email, password, dispatch) => {
-  console.log("email, password, dispatch", email, password);
+
   const formData = new FormData(); // ประกาศตัวแปร formData
   formData.append("isAdd", true);
   formData.append("email", email);
@@ -97,7 +97,7 @@ export const register_api = async (e, dispatch) => {
         "Content-Type": "multipart/form-data;charset=utf-8",
       },
     });
-    console.log("response", response.data.error);
+
 
     if (response.data.message) {
       dispatch({

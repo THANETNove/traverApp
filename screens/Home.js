@@ -29,7 +29,7 @@ const Home = ({ navigation }) => {
   };
 
   const handleBoxContent = (index) => {
-    console.log("index", index);
+   
     navigation.navigate("BoxContent");
   };
 

@@ -77,7 +77,7 @@ const Login = ({ navigation }) => {
         email: "กรุณาตรวจสอบ Email Password ใหม่",
       }));
     }
-    console.log("statusUser", statusUser);
+
   }, [user, statusUser]);
 
   return (

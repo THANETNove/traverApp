@@ -58,11 +58,11 @@ const UpPassword = ({ navigation }) => {
       navigation.navigate("Login");
     }
 
-    console.log("statusUpdatePassword", statusUpdatePassword);
+
   }, [statusUpdatePassword]);
 
   useEffect(() => {
-    console.log("idEmail", idEmail);
+
   }, []);
   return (
     <View style={styles.container}>
