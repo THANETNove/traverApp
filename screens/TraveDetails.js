@@ -115,6 +115,7 @@ const TraveDetails = ({ navigation }) => {
         </SafeAreaView>
     );
 };
+const { width, height } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
     container: {
@@ -174,7 +175,13 @@ const styles = StyleSheet.create({
     },
     detaisBox: {
         backgroundColor: "#ffff",
-        padding: 24
+        padding: 24,
+        height: height
+    },
+    detaisBox: {
+        backgroundColor: "#ffff",
+        padding: 24,
+        height: "100%"
     },
     history: {
         fontSize: 18,
