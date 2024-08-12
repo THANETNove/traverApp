@@ -68,7 +68,7 @@ const TraveDetails = ({ navigation }) => {
 
         console.log("placeData.video ", placeData.video);
         return (
-            <View style={styles.detaisBox}>
+            <View style={styles.detaisBoxVideo}>
 
                 <WebView
                     source={{ uri: placeData.video }}
@@ -82,7 +82,7 @@ const TraveDetails = ({ navigation }) => {
 
         console.log("placeData.video ", placeData.video);
         return (
-            <View style={styles.detaisBox}>
+            <View style={styles.detaisBoxVideo}>
 
                 <WebView
                     source={{ uri: placeData.gps }}
@@ -190,12 +190,12 @@ const styles = StyleSheet.create({
     detaisBox: {
         backgroundColor: "#ffff",
         padding: 24,
-        height: height
+
     },
-    detaisBox: {
+    detaisBoxVideo: {
         backgroundColor: "#ffff",
         padding: 24,
-        height: "100%"
+        height: 550
     },
     history: {
         fontSize: 18,
