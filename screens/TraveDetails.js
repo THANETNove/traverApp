@@ -78,6 +78,20 @@ const TraveDetails = ({ navigation }) => {
             </View>
         )
     }
+    const Gps = () => {
+
+        console.log("placeData.video ", placeData.video);
+        return (
+            <View style={styles.detaisBox}>
+
+                <WebView
+                    source={{ uri: placeData.gps }}
+                    style={styles.webview}
+                />
+
+            </View>
+        )
+    }
 
 
 
@@ -108,7 +122,7 @@ const TraveDetails = ({ navigation }) => {
                     </TouchableOpacity>
                 </View>
                 <View style={styles.statusBox}>
-                    {status == 0 ? Details() : status == 1 ? Video() : <></>}
+                    {status == 0 ? Details() : status == 1 ? Video() : Gps()}
 
                 </View>
             </ScrollView>
