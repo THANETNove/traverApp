@@ -130,7 +130,7 @@ export const clickEmail_api = async (email, dispatch) => {
       },
     });
 
-    console.log('response', response.data.user.id);
+
     if (response.data.message) {
       console.log();
       dispatch({
