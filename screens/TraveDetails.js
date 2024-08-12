@@ -71,7 +71,7 @@ const TraveDetails = ({ navigation }) => {
             <View style={styles.detaisBox}>
 
                 <WebView
-                    source={{ uri: 'https://www.youtube.com/embed/8WQUmd8P5zI' }}
+                    source={{ uri: placeData.video }}
                     style={styles.webview}
                 />
 
