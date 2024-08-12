@@ -10,9 +10,13 @@ import {
   Pressable,
 } from "react-native";
 import Carousel from "react-native-snap-carousel";
+import { useSelector, useDispatch } from "react-redux";
+import { getData } from "../redux/auth";
 const windowWidth = Dimensions.get("window").width;
 
 const Home = ({ navigation }) => {
+  const dispatch = useDispatch();
+  const { data, statusData } = useSelector((state) => state.authUser);
   const images = [
     require("../assets/image/a1.webp"),
     require("../assets/image/a2.jpeg"),
@@ -29,9 +33,16 @@ const Home = ({ navigation }) => {
   };
 
   const handleBoxContent = (index) => {
-   
-    navigation.navigate("BoxContent");
+    dispatch(getData(index, dispatch));
+    /*   navigation.navigate("BoxContent"); */
+
   };
+
+  useEffect(() => {
+    console.log("statusData", statusData);
+    //console.log("data", data);
+  }, [statusData])
+
 
   return (
     <SafeAreaView style={styles.container}>
@@ -56,10 +67,10 @@ const Home = ({ navigation }) => {
           <Text style={styles.textButton}>สถานที่แหล่งท่องเที่ยว</Text>
         </Pressable>
         <Pressable style={styles.button} onPress={() => handleBoxContent(2)}>
-          <Text style={styles.textButton}>สถานที่แหล่งท่องเที่ยว</Text>
+          <Text style={styles.textButton}>สถานที่พัก</Text>
         </Pressable>
         <Pressable style={styles.button} onPress={() => handleBoxContent(3)}>
-          <Text style={styles.textButton}>สถานที่แหล่งท่องเที่ยว</Text>
+          <Text style={styles.textButton}>สถานที่ซื้อของฝาก</Text>
         </Pressable>
       </ScrollView>
     </SafeAreaView>

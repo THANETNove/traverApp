@@ -24,11 +24,18 @@ export const types = {
   NEW_PASSWORD_SUCCEED: "NEW_PASSWORD_SUCCEED",
   NEW_PASSWORD_FAIL: "NEW_PASSWORD_FAIL",
   CLEAR_STATUS: "CLEAR_STATUS",
+  GET_DATA: "GET_DATA",
+  GET_DATA_SUCCEED: "GET_DATA_SUCCEED",
+  GET_DATA_FAIL: "GET_DATA_FAIL",
 };
 
 export const loginUser = (email, password, dispatch) => ({
   type: types.LOGIN_USER,
   action: login_api(email, password, dispatch),
+});
+export const getData = (id, dispatch) => ({
+  type: types.GET_DATA,
+  action: getData_api(id, dispatch),
 });
 
 export const logoutUser = () => ({
@@ -80,6 +87,37 @@ export const login_api = async (email, password, dispatch) => {
     return {
       type: types.REGISTER_FAIL,
       payload: "error",
+    };
+  }
+};
+export const getData_api = async (id, dispatch) => {
+
+  const formData = new FormData(); // ประกาศตัวแปร formData
+  formData.append("isAdd", true);
+  formData.append("id", id);
+
+
+  try {
+    const response = await axios.post(`${url}/getData.php`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data;charset=utf-8",
+      },
+    });
+    console.log("response.data", response.data);
+    if (response.data.message) {
+      dispatch({
+        type: types.GET_DATA_SUCCEED,
+        payload: response.data.data, // ส่งข้อมูลข้อไปยัง reducer
+      });
+    } else {
+      dispatch({
+        type: types.GET_DATA_SUCCEED,
+        payload: null, // ส่งข้อมูลข้อไปยัง reducer
+      });
+    }
+  } catch (error) {
+    return {
+      type: types.GET_DATA_FAIL,
     };
   }
 };
@@ -183,6 +221,8 @@ const INIT_STATE = {
   statusUser: "default",
   statusEmail: "default",
   idEmail: null,
+  data: null,
+  statusData: "default",
 };
 
 export function reducer(state = INIT_STATE, action) {
@@ -243,6 +283,21 @@ export function reducer(state = INIT_STATE, action) {
       return { ...state, statusUpdatePassword: action.payload };
     case types.NEW_PASSWORD_FAIL:
       return { ...state, statusUpdatePassword: action.payload };
+    case types.GET_DATA:
+      return {
+        ...state, statusData: "load",
+        data: null
+      };
+    case types.GET_DATA_SUCCEED:
+      return {
+        ...state, statusData: "success",
+        data: action.payload
+      };
+    case types.GET_DATA_FAIL:
+      return {
+        ...state, statusData: false,
+        data: null
+      };
     case types.CLEAR_STATUS:
       return {
         ...state,
