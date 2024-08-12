@@ -5,7 +5,7 @@ const getUrl = () => {
     return https_url;
 };
 const getUrlImage = () => {
-    const https_url = "http://192.168.1.104/project/traverWeb/public/";
+    const https_url = "http://localhost/project/traverWeb/public/";
     // const https_url = "https://medocargo.com/API";
     return https_url;
 };

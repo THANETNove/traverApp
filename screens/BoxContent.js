@@ -1,28 +1,29 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   StyleSheet,
   View,
   Text,
   Image,
   SafeAreaView,
-  Dimensions,
   ScrollView,
   Pressable,
   TextInput,
 } from "react-native";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { apiUrlImage as url } from "../config";
+import ImageModal from "./ImageModal";
 
 const BoxContent = ({ navigation }) => {
-  const { data, statusData, } = useSelector((state) => state.authUser);
-  const [traveData, setTraveData] = React.useState(data);
+  const { data } = useSelector((state) => state.authUser);
+  const [traveData, setTraveData] = useState(data);
   const [searchText, setSearchText] = useState('');
-
+  const [selectedImage, setSelectedImage] = useState('');
 
   const handleGoBack = () => {
     navigation.navigate("Home");
   };
+
   const handleSearch = (text) => {
     setSearchText(text);
     const filtered = data.filter(item =>
@@ -31,6 +32,13 @@ const BoxContent = ({ navigation }) => {
     setTraveData(filtered);
   };
 
+  const openModal = (imageUri) => {
+    setSelectedImage(imageUri);
+  };
+
+  const closeModal = () => {
+    setSelectedImage('');
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -47,7 +55,7 @@ const BoxContent = ({ navigation }) => {
         <TextInput
           style={styles.input}
           placeholder={"ค้นหา ชื่อสถานที่"}
-          secureTextEntry={false} // เปลี่ยนเป็น false สำหรับการค้นหาแบบปกติ
+          secureTextEntry={false}
           onChangeText={handleSearch}
           value={searchText}
         />
@@ -60,14 +68,15 @@ const BoxContent = ({ navigation }) => {
               traveData.map((item, index) => {
                 let img = JSON.parse(item.image);
                 const urlImag = `${url}${img[0]}`;
-                console.log("index", urlImag);
                 return (
                   <Pressable key={index} style={styles.boxContent}>
                     <View>
-                      <Image
-                        source={{ uri: urlImag }} // Replace with the actual path to your local image
-                        style={styles.image}
-                      />
+                      <Pressable onPress={() => openModal(urlImag)}>
+                        <Image
+                          source={{ uri: urlImag }}
+                          style={styles.image}
+                        />
+                      </Pressable>
                     </View>
                     <View style={styles.viewText}>
                       <Text style={styles.textHead}>{item.name}</Text>
@@ -90,21 +99,26 @@ const BoxContent = ({ navigation }) => {
                       </View>
                     </View>
                   </Pressable>
-                )
+                );
               })
             ) : (
               <View style={styles.alertContainer}>
                 <Text style={styles.alertText}>ไม่มีข้อมูลที่จะแสดง</Text>
               </View>
             )}
-
           </View>
         </ScrollView>
       </View>
+
+      {/* Use ImageModal Component */}
+      <ImageModal
+        imageUrl={selectedImage}
+        onClose={closeModal}
+      />
     </SafeAreaView>
   );
 };
-export default BoxContent;
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -172,3 +186,5 @@ const styles = StyleSheet.create({
     backgroundColor: "#ffffff",
   },
 });
+
+export default BoxContent;
