@@ -28,6 +28,7 @@ const Register = ({ navigation }) => {
     subdistrict: "",
     district: "",
     province: "",
+    state: "0",
     zip_code: "",
   });
   const [errors, setErrors] = useState({
@@ -131,10 +132,16 @@ const Register = ({ navigation }) => {
   }, [user]);
 
   useEffect(() => {
-    if (statusUser == "email_exists") {
+    if (statusUser.email_exists) {
       setErrors((prevState) => ({
         ...prevState,
         email: "Email already exists",
+      }));
+    }
+    if (statusUser.name_exists) {
+      setErrors((prevState) => ({
+        ...prevState,
+        first_name: "Name already exists",
       }));
     }
   }, [statusUser]);

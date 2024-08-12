@@ -2,7 +2,7 @@
 import axios from "axios";
 
 const getUrl = () => {
-  const https_url = "http://localhost/project/travel_API";
+  const https_url = "http://localhost/project/trave_api";
   /*   const https_url = "https://medocargo.com/API"; */
   return https_url;
 };
@@ -68,7 +68,7 @@ export const login_api = async (email, password, dispatch) => {
     if (response.data.message) {
       dispatch({
         type: types.LOGIN_SUCCEED,
-        payload: response.data.data, // ส่งข้อมูลข้อผิดพลาดไปยัง reducer
+        payload: response.data.data, // ส่งข้อมูลข้อไปยัง reducer
       });
     } else {
       dispatch({
@@ -97,6 +97,7 @@ export const register_api = async (e, dispatch) => {
         "Content-Type": "multipart/form-data;charset=utf-8",
       },
     });
+    console.log("response", response.data.error);
 
     if (response.data.message) {
       dispatch({
