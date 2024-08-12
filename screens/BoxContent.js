@@ -16,13 +16,22 @@ import { apiUrlImage as url } from "../config";
 
 const BoxContent = ({ navigation }) => {
   const { data, statusData, } = useSelector((state) => state.authUser);
+  const [traveData, setTraveData] = React.useState(data);
+  const [searchText, setSearchText] = useState('');
+
 
   const handleGoBack = () => {
     navigation.navigate("Home");
   };
+  const handleSearch = (text) => {
+    setSearchText(text);
+    const filtered = data.filter(item =>
+      item.name.toLowerCase().includes(text.toLowerCase())
+    );
+    setTraveData(filtered);
+  };
 
 
-  console.log("url", url);
   return (
     <SafeAreaView style={styles.container}>
       <Pressable onPress={handleGoBack}>
@@ -38,15 +47,17 @@ const BoxContent = ({ navigation }) => {
         <TextInput
           style={styles.input}
           placeholder={"ค้นหา ชื่อสถานที่"}
-          secureTextEntry={true}
+          secureTextEntry={false} // เปลี่ยนเป็น false สำหรับการค้นหาแบบปกติ
+          onChangeText={handleSearch}
+          value={searchText}
         />
         <ScrollView
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}
         >
           <View style={styles.scrollBox}>
-            {data && data.length > 0 ? (
-              data.map((item, index) => {
+            {traveData && traveData.length > 0 ? (
+              traveData.map((item, index) => {
                 let img = JSON.parse(item.image);
                 const urlImag = `${url}${img[0]}`;
                 console.log("index", urlImag);
