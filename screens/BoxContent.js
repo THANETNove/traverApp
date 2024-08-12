@@ -10,14 +10,19 @@ import {
   Pressable,
   TextInput,
 } from "react-native";
+import { useSelector, useDispatch } from "react-redux";
 import Icon from "react-native-vector-icons/FontAwesome";
+import { apiUrlImage as url } from "../config";
 
 const BoxContent = ({ navigation }) => {
+  const { data, statusData, } = useSelector((state) => state.authUser);
+
   const handleGoBack = () => {
     navigation.navigate("Home");
   };
-  const data = Array.from({ length: 10 }, (_, index) => index + 1); // สร้าง array ขนาด 10 โดยให้ค่าเริ่มต้นเป็น 1
 
+
+  console.log("url", url);
   return (
     <SafeAreaView style={styles.container}>
       <Pressable onPress={handleGoBack}>
@@ -40,36 +45,48 @@ const BoxContent = ({ navigation }) => {
           showsHorizontalScrollIndicator={false}
         >
           <View style={styles.scrollBox}>
-            {data.map((item, index) => (
-              <Pressable key={index} style={styles.boxContent}>
-                <View>
-                  <Image
-                    source={require("../assets/image/a4.jpeg")} // Replace with the actual path to your local image
-                    style={styles.image}
-                  />
-                </View>
-                <View style={styles.viewText}>
-                  <Text style={styles.textHead}>วัดพระศรีรัตนศาสดาราม</Text>
-                  <Text style={styles.time}>เวลาทำการ null-null น.</Text>
-                  <View style={styles.boxIcon}>
-                    <Icon
-                      name="eye"
-                      size={20}
-                      style={styles.chevron}
-                      color="#0085FF"
-                    />
-                    <Text> 40</Text>
-                    <Icon
-                      name="heart"
-                      size={20}
-                      style={styles.chevron2}
-                      color="#0085FF"
-                    />
-                    <Text> 40</Text>
-                  </View>
-                </View>
-              </Pressable>
-            ))}
+            {data && data.length > 0 ? (
+              data.map((item, index) => {
+                let img = JSON.parse(item.image);
+                const urlImag = `${url}${img[0]}`;
+                console.log("index", urlImag);
+                return (
+                  <Pressable key={index} style={styles.boxContent}>
+                    <View>
+                      <Image
+                        source={{ uri: urlImag }} // Replace with the actual path to your local image
+                        style={styles.image}
+                      />
+                    </View>
+                    <View style={styles.viewText}>
+                      <Text style={styles.textHead}>{item.name}</Text>
+                      <Text style={styles.time}>เวลาทำการ {item.opening_closing_time}l น.</Text>
+                      <View style={styles.boxIcon}>
+                        <Icon
+                          name="eye"
+                          size={20}
+                          style={styles.chevron}
+                          color="#0085FF"
+                        />
+                        <Text> 40</Text>
+                        <Icon
+                          name="heart"
+                          size={20}
+                          style={styles.chevron2}
+                          color="#0085FF"
+                        />
+                        <Text> 40</Text>
+                      </View>
+                    </View>
+                  </Pressable>
+                )
+              })
+            ) : (
+              <View style={styles.alertContainer}>
+                <Text style={styles.alertText}>ไม่มีข้อมูลที่จะแสดง</Text>
+              </View>
+            )}
+
           </View>
         </ScrollView>
       </View>
@@ -88,6 +105,14 @@ const styles = StyleSheet.create({
   },
   box: {
     marginTop: 0,
+  },
+  alertContainer: {
+    marginTop: 64,
+    alignItems: 'center',
+  },
+  alertText: {
+    fontSize: 18,
+    color: "#7A7474",
   },
   boxContent: {
     marginTop: 16,

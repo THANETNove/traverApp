@@ -34,13 +34,16 @@ const Home = ({ navigation }) => {
 
   const handleBoxContent = (index) => {
     dispatch(getData(index, dispatch));
-    /*   navigation.navigate("BoxContent"); */
+    /*   */
 
   };
 
   useEffect(() => {
     console.log("statusData", statusData);
     //console.log("data", data);
+    if (statusData == "success") {
+      navigation.navigate("BoxContent");
+    }
   }, [statusData])
 
 

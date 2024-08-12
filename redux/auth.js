@@ -1,12 +1,6 @@
 // auth.js
 import axios from "axios";
-
-const getUrl = () => {
-  const https_url = "http://localhost/project/trave_api";
-  /*   const https_url = "https://medocargo.com/API"; */
-  return https_url;
-};
-const url = getUrl();
+import { apiUrl as url } from "../config";
 
 export const types = {
   LOGIN_USER: "LOGIN_USER",
@@ -103,7 +97,7 @@ export const getData_api = async (id, dispatch) => {
         "Content-Type": "multipart/form-data;charset=utf-8",
       },
     });
-    console.log("response.data", response.data);
+
     if (response.data.message) {
       dispatch({
         type: types.GET_DATA_SUCCEED,
