@@ -124,21 +124,29 @@ export const clickEmail_api = async (email, dispatch) => {
   formData.append("email", email);
 
   try {
-    const response = await axios.post(`${url}/clickEmail.php`, formData, {
+    const response = await axios.post(`${url}/checkEmail.php`, formData, {
       headers: {
         "Content-Type": "multipart/form-data;charset=utf-8",
       },
     });
+
+    console.log('response', response.data.user.id);
     if (response.data.message) {
+      console.log();
       dispatch({
         type: types.CLICK_EMAIL_SUCCEED,
-        payload: response.data, // ส่งข้อมูลข้อผิดพลาดไปยัง reducer
+        payload: response.data.user.id, // ส่งข้อมูลข้อผิดพลาดไปยัง reducer
+      });
+    } else {
+      dispatch({
+        type: types.CLICK_EMAIL_FAIL,
+        payload: false, // ส่งข้อมูลข้อผิดพลาดไปยัง reducer
       });
     }
   } catch (error) {
     return {
       type: types.CLICK_EMAIL_FAIL,
-      payload: error,
+      payload: false,
     };
   }
 };
@@ -222,7 +230,7 @@ export function reducer(state = INIT_STATE, action) {
     case types.CLICK_EMAIL_SUCCEED:
       return {
         ...state,
-        statusEmail: action.payload.message,
+        statusEmail: true,
         idEmail: action.payload.data,
       };
     case types.CLICK_EMAIL_FAIL:

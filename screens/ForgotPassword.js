@@ -17,7 +17,7 @@ import { useSelector, useDispatch } from "react-redux";
 
 const ForgotPassword = ({ navigation }) => {
   const dispatch = useDispatch();
-  const { statusEmail } = useSelector((state) => state.authUser);
+  const { statusEmail, idEmail } = useSelector((state) => state.authUser);
   const [email, onChangeEmail] = React.useState("");
 
   function isValidEmail(email) {
@@ -62,15 +62,28 @@ const ForgotPassword = ({ navigation }) => {
   }, []);
 
   useEffect(() => {
-    if (statusEmail == "true") {
+    if (statusEmail == true) {
+      console.log("999");
       navigation.navigate("UpPassword");
     }
-    if (statusEmail == "false") {
+
+
+    if (statusEmail == false) {
       setErrors((prevState) => ({
         ...prevState,
         email: "Email ไม่ถูกต้อง กรุณาตรวจ Email",
       }));
     }
+  }, [statusEmail]);
+  useEffect(() => {
+
+    console.log("statusEmail", statusEmail, idEmail);
+    if (statusEmail == true) {
+      console.log("999");
+      navigation.navigate("UpPassword");
+    }
+
+
   }, [statusEmail]);
 
   return (
