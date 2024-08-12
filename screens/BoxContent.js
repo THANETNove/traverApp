@@ -40,6 +40,13 @@ const BoxContent = ({ navigation }) => {
     setSelectedImage('');
   };
 
+  const onPlaces = (data) => {
+
+    navigation.navigate("TraveDetails", { placeData: data });
+
+  }
+  // 
+
   return (
     <SafeAreaView style={styles.container}>
       <Pressable onPress={handleGoBack}>
@@ -69,7 +76,7 @@ const BoxContent = ({ navigation }) => {
                 let img = JSON.parse(item.image);
                 const urlImag = `${url}${img[0]}`;
                 return (
-                  <Pressable key={index} style={styles.boxContent}>
+                  <Pressable key={index} style={styles.boxContent} onPress={() => onPlaces(item)}>
                     <View>
                       <Pressable onPress={() => openModal(urlImag)}>
                         <Image

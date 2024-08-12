@@ -24,6 +24,7 @@ import ForgotPassword from "./screens/ForgotPassword";
 import Register from "./screens/Register";
 import UpPassword from "./screens/UpPassword";
 import BoxContent from "./screens/BoxContent";
+import TraveDetails from "./screens/TraveDetails";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -41,6 +42,13 @@ function HomeStack({ navigation }) {
       <Stack.Screen
         name="BoxContent"
         component={BoxContent}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="TraveDetails"
+        component={TraveDetails}
         options={{
           headerShown: false,
         }}
