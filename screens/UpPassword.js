@@ -47,6 +47,7 @@ const UpPassword = ({ navigation }) => {
 
   const handleNewPassword = () => {
     if (validatePass()) {
+
       if (idEmail) {
         dispatch(updatePassword(idEmail, password, dispatch));
       }
@@ -54,7 +55,9 @@ const UpPassword = ({ navigation }) => {
   };
 
   useEffect(() => {
-    if (statusUpdatePassword == "true") {
+
+    console.log("statusUpdatePassword", statusUpdatePassword);
+    if (statusUpdatePassword == true) {
       navigation.navigate("Login");
     }
 

@@ -131,8 +131,8 @@ export const clickEmail_api = async (email, dispatch) => {
     });
 
 
-    if (response.data.message) {
-      console.log();
+    if (response.data.user.id) {
+
       dispatch({
         type: types.CLICK_EMAIL_SUCCEED,
         payload: response.data.user.id, // ส่งข้อมูลข้อผิดพลาดไปยัง reducer
@@ -162,10 +162,12 @@ export const updatePassword_api = async (id, password, dispatch) => {
         "Content-Type": "multipart/form-data;charset=utf-8",
       },
     });
+
+    console.log("response", response.data);
     if (response.data.message) {
       dispatch({
         type: types.NEW_PASSWORD_SUCCEED,
-        payload: response.data.message, // ส่งข้อมูลข้อผิดพลาดไปยัง reducer
+        payload: true, // ส่งข้อมูลข้อผิดพลาดไปยัง reducer
       });
     }
   } catch (error) {
@@ -231,7 +233,7 @@ export function reducer(state = INIT_STATE, action) {
       return {
         ...state,
         statusEmail: true,
-        idEmail: action.payload.data,
+        idEmail: action.payload,
       };
     case types.CLICK_EMAIL_FAIL:
       return { ...state, statusEmail: action.payload };
