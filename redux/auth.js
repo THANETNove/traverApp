@@ -68,7 +68,7 @@ export const login_api = async (email, password, dispatch) => {
     if (response.data.message) {
       dispatch({
         type: types.LOGIN_SUCCEED,
-        payload: response.data.data, // ส่งข้อมูลข้อไปยัง reducer
+        payload: response.data.user, // ส่งข้อมูลข้อไปยัง reducer
       });
     } else {
       dispatch({
