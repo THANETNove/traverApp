@@ -24,6 +24,9 @@ export const types = {
   ADD_VIEW: "ADD_VIEW",
   ADD_VIEW_SUCCEED: "ADD_VIEW_SUCCEED",
   ADD_VIEW_FAIL: "ADD_VIEW_FAIL",
+  ADD_LINK: "ADD_LINK",
+  ADD_LINK_SUCCEED: "ADD_LINK_SUCCEED",
+  ADD_LINK_FAIL: "ADD_LINK_FAIL",
 };
 
 export const loginUser = (email, password, dispatch) => ({
@@ -37,6 +40,10 @@ export const getData = (id, dispatch) => ({
 export const addView = (id, dispatch) => ({
   type: types.ADD_VIEW,
   action: addView_api(id, dispatch),
+});
+export const addLink = (id, dispatch) => ({
+  type: types.ADD_LINK,
+  action: addLink_api(id, dispatch),
 });
 
 export const logoutUser = () => ({
@@ -123,11 +130,9 @@ export const getData_api = async (id, dispatch) => {
   }
 };
 export const addView_api = async (id, dispatch) => {
-
-  const formData = new FormData(); // ประกาศตัวแปร formData
+  const formData = new FormData();
   formData.append("isAdd", true);
   formData.append("id", id);
-
 
   try {
     const response = await axios.post(`${url}/addView.php`, formData, {
@@ -136,25 +141,63 @@ export const addView_api = async (id, dispatch) => {
       },
     });
 
-    console.log("response", response);
+    console.log("response View", response);
 
     if (response.data.message) {
       dispatch({
         type: types.ADD_VIEW_SUCCEED,
-        payload: response.data.message, // ส่งข้อมูลข้อไปยัง reducer
+        payload: response.data.message,
       });
     } else {
       dispatch({
         type: types.ADD_VIEW_FAIL,
-        payload: response.data.message, // ส่งข้อมูลข้อไปยัง reducer
+        payload: response.data.message || "Unknown error",
       });
     }
   } catch (error) {
-    return {
+    console.error("Error in addView_api:", error);
+    dispatch({
       type: types.ADD_VIEW_FAIL,
-    };
+      payload: error.message || "Request failed",
+    });
   }
 };
+
+export const addLink_api = async (id, dispatch) => {
+  const formData = new FormData();
+  formData.append("isAdd", true);
+  formData.append("id", id);
+
+  try {
+    const response = await axios.post(`${url}/addLink.php`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data;charset=utf-8",
+      },
+    });
+
+    console.log("response999", response.data);
+
+    if (response.data.message) {
+      console.log("8888");
+      dispatch({
+        type: types.ADD_LINK_SUCCEED,
+        payload: response.data.message,
+      });
+    } else {
+      dispatch({
+        type: types.ADD_LINK_FAIL,
+        payload: response.data.message || "Unknown error",
+      });
+    }
+  } catch (error) {
+    console.error("Error in addLink_api:", error);
+    dispatch({
+      type: types.ADD_LINK_FAIL,
+      payload: error.message || "Request failed",
+    });
+  }
+};
+
 
 export const register_api = async (e, dispatch) => {
   const formData = new FormData();
@@ -258,6 +301,7 @@ const INIT_STATE = {
   data: null,
   statusData: "default",
   statusView: "default",
+  statusLink: "default",
 };
 
 export function reducer(state = INIT_STATE, action) {
@@ -333,7 +377,7 @@ export function reducer(state = INIT_STATE, action) {
         ...state, statusData: false,
         data: null
       };
-    case types.ADD_VIEW_SUCCEED:
+    case types.ADD_VIEW:
       return {
         ...state, statusView: "load",
       };
@@ -345,6 +389,18 @@ export function reducer(state = INIT_STATE, action) {
       return {
         ...state, statusView: "fail",
       };
+    case types.ADD_LINK:
+      return {
+        ...state, statusLink: "load",
+      };
+    case types.ADD_LINK_SUCCEED:
+      return {
+        ...state, statusLink: "success",
+      };
+    case types.ADD_LINK_FAIL:
+      return {
+        ...state, statusLink: "success",
+      };
     case types.CLEAR_STATUS:
       return {
         ...state,
@@ -352,6 +408,7 @@ export function reducer(state = INIT_STATE, action) {
         statusEmail: "default",
         idEmail: null,
         statusUpdatePassword: "default",
+        statusLink: "default",
       };
     default:
       return { ...state };

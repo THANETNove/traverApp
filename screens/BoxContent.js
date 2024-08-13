@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import {
   StyleSheet,
   View,
@@ -14,12 +14,12 @@ import { apiUrlImage as url } from "../config";
 import ImageModal from "./ImageModal";
 import { StatusBar } from 'expo-status-bar';
 import { useSelector, useDispatch } from "react-redux";
-import { getData } from "../redux/auth";
+import { getData, clearStatus, addLink } from "../redux/auth";
 import { useFocusEffect } from '@react-navigation/native'; // นำเข้าที่ถูกต้อง
 
 
 const BoxContent = ({ navigation }) => {
-  const { data } = useSelector((state) => state.authUser);
+  const { data, statusLink } = useSelector((state) => state.authUser);
   const [traveData, setTraveData] = useState(data);
   const [searchText, setSearchText] = useState('');
   const [selectedImage, setSelectedImage] = useState('');
@@ -39,9 +39,25 @@ const BoxContent = ({ navigation }) => {
   );
 
 
-  useEffect(() => {
+  useMemo(() => {
     setTraveData(data); // Update traveData when data in Redux changes
-  }, [data]);
+
+
+    if (statusLink == "success") {
+      dispatch(clearStatus());
+    }
+
+  }, [data, dispatch]);
+
+
+  useEffect(() => {
+    console.log("statusLink", statusLink);
+
+    //console.log("data", data);
+    if (statusLink == "success") {
+      dispatch(getData(data && data[0].category, dispatch));
+    }
+  }, [statusLink])
 
   const handleSearch = (text) => {
     setSearchText(text);
@@ -62,6 +78,11 @@ const BoxContent = ({ navigation }) => {
   const onPlaces = (data) => {
 
     navigation.navigate("TraveDetails", { placeData: data });
+
+  }
+  const onLink = (id) => {
+
+    dispatch(addLink(id, dispatch));
 
   }
   // 
@@ -117,12 +138,14 @@ const BoxContent = ({ navigation }) => {
                           color="#0085FF"
                         />
                         <Text> {item.view}</Text>
-                        <Icon
-                          name="heart"
-                          size={20}
-                          style={styles.chevron2}
-                          color="#0085FF"
-                        />
+                        <Pressable onPress={() => onLink(item.id)}>
+                          <Icon
+                            name="heart"
+                            size={20}
+                            style={styles.chevron2}
+                            color="#0085FF"
+                          />
+                        </Pressable>
                         <Text> {item.like > 0 && item.like}</Text>
                       </View>
                     </View>

@@ -56,12 +56,15 @@ const Home = ({ navigation }) => {
   };
 
   useEffect(() => {
-    console.log("statusData", statusData);
+
     //console.log("data", data);
     if (statusData == "success") {
       navigation.navigate("BoxContent");
     }
   }, [statusData])
+
+
+
 
 
   return (
