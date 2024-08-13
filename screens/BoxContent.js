@@ -13,6 +13,8 @@ import { useSelector } from "react-redux";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { apiUrlImage as url } from "../config";
 import ImageModal from "./ImageModal";
+import { StatusBar } from 'expo-status-bar';
+
 
 const BoxContent = ({ navigation }) => {
   const { data } = useSelector((state) => state.authUser);
@@ -49,6 +51,7 @@ const BoxContent = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
+
       <Pressable onPress={handleGoBack}>
         <Icon
           name="chevron-left"
@@ -128,6 +131,7 @@ const BoxContent = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
+    paddingTop: 16,
     flex: 1,
     marginHorizontal: 16,
   },

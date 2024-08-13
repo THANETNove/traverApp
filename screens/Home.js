@@ -9,7 +9,7 @@ import {
   ScrollView,
   Pressable,
 } from "react-native";
-import Carousel from "react-native-snap-carousel";
+/* import Carousel from "react-native-snap-carousel"; */
 import { useSelector, useDispatch } from "react-redux";
 import { getData } from "../redux/auth";
 const windowWidth = Dimensions.get("window").width;
@@ -50,7 +50,7 @@ const Home = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.boxCarousel}>
-        <Carousel
+        {/*  <Carousel
           data={images}
           renderItem={renderItem}
           sliderWidth={windowWidth}
@@ -59,7 +59,7 @@ const Home = ({ navigation }) => {
           loop={true}
           layout={"stack"}
           layoutCardOffset={`18`}
-        />
+        /> */}
       </View>
       <ScrollView
         showsVerticalScrollIndicator={false}
