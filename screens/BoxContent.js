@@ -123,7 +123,7 @@ const BoxContent = ({ navigation }) => {
                           style={styles.chevron2}
                           color="#0085FF"
                         />
-                        <Text> 40</Text>
+                        <Text> {item.like > 0 && item.like}</Text>
                       </View>
                     </View>
                   </Pressable>
