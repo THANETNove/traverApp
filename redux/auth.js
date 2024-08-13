@@ -21,6 +21,9 @@ export const types = {
   GET_DATA: "GET_DATA",
   GET_DATA_SUCCEED: "GET_DATA_SUCCEED",
   GET_DATA_FAIL: "GET_DATA_FAIL",
+  ADD_VIEW: "ADD_VIEW",
+  ADD_VIEW_SUCCEED: "ADD_VIEW_SUCCEED",
+  ADD_VIEW_FAIL: "ADD_VIEW_FAIL",
 };
 
 export const loginUser = (email, password, dispatch) => ({
@@ -30,6 +33,10 @@ export const loginUser = (email, password, dispatch) => ({
 export const getData = (id, dispatch) => ({
   type: types.GET_DATA,
   action: getData_api(id, dispatch),
+});
+export const addView = (id, dispatch) => ({
+  type: types.ADD_VIEW,
+  action: addView_api(id, dispatch),
 });
 
 export const logoutUser = () => ({
@@ -112,6 +119,39 @@ export const getData_api = async (id, dispatch) => {
   } catch (error) {
     return {
       type: types.GET_DATA_FAIL,
+    };
+  }
+};
+export const addView_api = async (id, dispatch) => {
+
+  const formData = new FormData(); // ประกาศตัวแปร formData
+  formData.append("isAdd", true);
+  formData.append("id", id);
+
+
+  try {
+    const response = await axios.post(`${url}/addView.php`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data;charset=utf-8",
+      },
+    });
+
+    console.log("response", response);
+
+    if (response.data.message) {
+      dispatch({
+        type: types.ADD_VIEW_SUCCEED,
+        payload: response.data.message, // ส่งข้อมูลข้อไปยัง reducer
+      });
+    } else {
+      dispatch({
+        type: types.ADD_VIEW_FAIL,
+        payload: response.data.message, // ส่งข้อมูลข้อไปยัง reducer
+      });
+    }
+  } catch (error) {
+    return {
+      type: types.ADD_VIEW_FAIL,
     };
   }
 };
@@ -217,6 +257,7 @@ const INIT_STATE = {
   idEmail: null,
   data: null,
   statusData: "default",
+  statusView: "default",
 };
 
 export function reducer(state = INIT_STATE, action) {
@@ -291,6 +332,18 @@ export function reducer(state = INIT_STATE, action) {
       return {
         ...state, statusData: false,
         data: null
+      };
+    case types.ADD_VIEW_SUCCEED:
+      return {
+        ...state, statusView: "load",
+      };
+    case types.ADD_VIEW_SUCCEED:
+      return {
+        ...state, statusView: "success",
+      };
+    case types.ADD_VIEW_FAIL:
+      return {
+        ...state, statusView: "fail",
       };
     case types.CLEAR_STATUS:
       return {

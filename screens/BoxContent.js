@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   StyleSheet,
   View,
@@ -9,11 +9,13 @@ import {
   Pressable,
   TextInput,
 } from "react-native";
-import { useSelector } from "react-redux";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { apiUrlImage as url } from "../config";
 import ImageModal from "./ImageModal";
 import { StatusBar } from 'expo-status-bar';
+import { useSelector, useDispatch } from "react-redux";
+import { getData } from "../redux/auth";
+import { useFocusEffect } from '@react-navigation/native'; // นำเข้าที่ถูกต้อง
 
 
 const BoxContent = ({ navigation }) => {
@@ -21,10 +23,25 @@ const BoxContent = ({ navigation }) => {
   const [traveData, setTraveData] = useState(data);
   const [searchText, setSearchText] = useState('');
   const [selectedImage, setSelectedImage] = useState('');
-
+  const dispatch = useDispatch();
   const handleGoBack = () => {
-    navigation.navigate("Home");
+    navigation.goBack();
   };
+
+  useFocusEffect(
+    useCallback(() => {
+      // Fetch new data when the screen is focused
+      dispatch(getData(data && data[0].category, dispatch));  // Replace `getData()` with your actual action and parameters if needed
+
+      // Optionally, return a cleanup function if necessary
+      return () => { };
+    }, [dispatch])
+  );
+
+
+  useEffect(() => {
+    setTraveData(data); // Update traveData when data in Redux changes
+  }, [data]);
 
   const handleSearch = (text) => {
     setSearchText(text);
@@ -76,6 +93,7 @@ const BoxContent = ({ navigation }) => {
           <View style={styles.scrollBox}>
             {traveData && traveData.length > 0 ? (
               traveData.map((item, index) => {
+
                 let img = JSON.parse(item.image);
                 const urlImag = `${url}${img[0]}`;
                 return (
@@ -98,7 +116,7 @@ const BoxContent = ({ navigation }) => {
                           style={styles.chevron}
                           color="#0085FF"
                         />
-                        <Text> 40</Text>
+                        <Text> {item.view}</Text>
                         <Icon
                           name="heart"
                           size={20}

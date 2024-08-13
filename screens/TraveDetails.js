@@ -6,6 +6,7 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import { apiUrlImage as url } from "../config";
 import RenderHtml from 'react-native-render-html';
 import { WebView } from 'react-native-webview';
+import { addView } from "../redux/auth"; // ต้องการ import logoutUser
 
 
 
@@ -27,6 +28,14 @@ const TraveDetails = ({ navigation }) => {
     const handlePlayPause = () => {
         setIsPaused(!isPaused);
     };
+
+    useEffect(() => {
+
+
+        dispatch(addView(placeData.id, dispatch));
+
+    }, [])
+
 
     const Details = () => {
         let img = JSON.parse(placeData.image);
@@ -66,28 +75,27 @@ const TraveDetails = ({ navigation }) => {
 
     const Video = () => {
 
-        console.log("placeData.video ", placeData.video);
         return (
             <View style={styles.detaisBoxVideo}>
 
-                <WebView
+                {placeData.video ? <WebView
                     source={{ uri: placeData.video }}
                     style={styles.webview}
-                />
+                /> : <View style={styles.loadingPlaceholder} />}
+
 
             </View>
         )
     }
     const Gps = () => {
 
-        console.log("placeData.video ", placeData.video);
         return (
             <View style={styles.detaisBoxVideo}>
-
-                <WebView
+                {placeData.gps ? <WebView
                     source={{ uri: placeData.gps }}
                     style={styles.webview}
-                />
+                /> : <View style={styles.loadingPlaceholder} />}
+
 
             </View>
         )
@@ -207,6 +215,11 @@ const styles = StyleSheet.create({
     webview: {
         width: '100%',
         height: 200,
+    },
+    loadingPlaceholder: {
+        height: 200,
+        width: '100%',
+        backgroundColor: '#ccc', // You can customize the loading placeholder
     },
 });
 

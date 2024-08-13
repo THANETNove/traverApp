@@ -1,4 +1,5 @@
 // App.js
+
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View, SafeAreaView, Button } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -33,7 +34,7 @@ function HomeStack({ navigation }) {
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name="Home"
+        name="HomeScreen"
         component={Home}
         options={{
           headerShown: false,
@@ -74,7 +75,7 @@ function MyTabs() {
   return (
     <Tab.Navigator>
       <Tab.Screen
-        name="Home"
+        name="HomeTab"
         component={HomeStack}
         options={{
           headerShown: false,
