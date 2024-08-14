@@ -172,7 +172,7 @@ const BoxContent = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 16,
+    paddingTop: 44,
     flex: 1,
     marginHorizontal: 16,
   },

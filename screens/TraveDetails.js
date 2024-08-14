@@ -142,7 +142,8 @@ const { width, height } = Dimensions.get('window');
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        margin: 16
+        marginHorizontal: 16,
+        marginTop: 44
     },
     chevron: {
         marginRight: 8,

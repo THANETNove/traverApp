@@ -110,6 +110,7 @@ export default function App() {
     <Provider store={store}>
       <PersistGate loading={null} persistor={persister}>
         <NavigationContainer>
+
           <Stack.Navigator
             initialRouteName="Index"
             screenOptions={{ headerShown: false }}
@@ -124,5 +125,6 @@ export default function App() {
         </NavigationContainer>
       </PersistGate>
     </Provider>
+
   );
 }
